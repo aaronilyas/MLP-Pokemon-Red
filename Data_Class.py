@@ -18,11 +18,16 @@ class Data_From_JsonL:
         self.file_path = file_path
         self.number_of_lines = 0
         self.list_of_dictionaries = []
-        with open(file_path, "r") as data:
-            for line in data:
-                self.number_of_lines += 1
+        try: 
+            with open(file_path, "r") as data:
+                for line in data:
+                    self.number_of_lines += 1
 
             data.close()
+        except Exception as e:
+            print("Please input a file path for a JsonL file")
+            raise e
+            
 
         with open(file_path, "r") as data_again:
             for line_two in data_again:
@@ -48,7 +53,7 @@ class Data_From_JsonL:
         """
         return self.list_of_dictionaries
 
-    def get_tensor_of_gray_scale_pixel_values_and_its_dictionary(self, index):
+    def get_tensor_of_gray_scale_pixel_values_and_its_dictionary(self, index) -> tuple:
         """
         This method returns both an tensor consisting of the gray scale pixel values for an image at the index you specify, as well as
         the dictionary that image is contained in.
