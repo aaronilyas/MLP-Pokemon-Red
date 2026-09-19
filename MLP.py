@@ -34,6 +34,7 @@ class MLP(nn.Module):
                 nn.Linear(32, 32),
                 nn.ReLU(),
                 nn.Dropout(),
+                nn.Linear(32, 9),
                 nn.Softmax(),
             )
             self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
