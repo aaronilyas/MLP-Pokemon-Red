@@ -123,13 +123,13 @@ class MLP(nn.Module):
         else:
             return ""
 
-    def train_network(self, number_of_epochs: int) -> None:
+    def train_network(self, number_of_examples: int) -> None:
         criterion = nn.CrossEntropyLoss()
 
-        for epoch in range(number_of_epochs):
+        for training_example in range(number_of_examples):
             pixels, label_info = (
                 self.data_set.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(
-                    epoch
+                    number_of_examples
                 )
             )
             input_data = pixels.float() / 255.0
