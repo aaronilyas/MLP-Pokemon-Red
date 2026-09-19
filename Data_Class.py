@@ -56,5 +56,5 @@ class Data_From_JsonL:
         image_name = "first_gym_001/" + image_name
         img = Image.open(image_name)
         gray_img = img.convert("L")
-        img_data = tensor(list(gray_img.get_data()))  # type: ignore
+        img_data = tensor(list(gray_img.getdata()))  # type: ignore
         return img_data, self.list_of_dictionaries[index]

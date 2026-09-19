@@ -10,13 +10,11 @@ class MLP(nn.Module):
     number_of_activations_for_hidden_layer: int
     optimizer: optim.Adam
     model: nn.Sequential
-    number_of_activations_for_hidden_layer_for_input_layer = 23040
+    number_of_activations_for_input_layer = 23040
 
     def __init__(
         self, data_set: Data_Class.Data_From_JsonL, training_mode: bool
     ) -> None:
-
-        self.number_of_activations_for_input_layer = len(self.input_value)
         self.number_of_activations_for_hidden_layer = 32
         self.number_of_output_neurons = 9
         super().__init__()
