@@ -15,6 +15,10 @@ class MLP(nn.Module):
     def __init__(
         self, data_set: Data_Class.Data_From_JsonL, training_mode: bool
     ) -> None:
+
+        self.number_of_activations_for_input_layer = len(self.input_value)
+        self.number_of_activations_for_hidden_layer = 32
+        self.number_of_output_neurons = 9
         super().__init__()
         if training_mode is True:
             self.data_set = data_set
@@ -23,9 +27,6 @@ class MLP(nn.Module):
                     0
                 )[0]
             )
-            self.number_of_activations_for_input_layer = len(self.input_value)
-            self.number_of_activations_for_hidden_layer = 32
-            self.number_of_output_neurons = 9
             self.model = nn.Sequential(
                 nn.Linear(
                     self.number_of_activations_for_input_layer,
@@ -54,12 +55,26 @@ class MLP(nn.Module):
         else:
             self.model = nn.Sequential(
                 nn.Linear(
-                    self.number_of_activations_for_hidden_layer_for_input_layer, 32
+                    self.number_of_activations_for_input_layer,
+                    self.number_of_activations_for_hidden_layer,
+                ),
+                nn.ReLU(),
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer,
+                    self.number_of_activations_for_hidden_layer,
+                ),
+                nn.Dropout(),
+                nn.ReLU(),
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer,
+                    self.number_of_activations_for_hidden_layer,
                 ),
                 nn.ReLU(),
                 nn.Dropout(),
-                nn.ReLU(),
-                nn.Dropout(),
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer,
+                    self.number_of_output_neurons,
+                ),
                 nn.Softmax(),
             )
             self.model.eval()
