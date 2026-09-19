@@ -25,10 +25,8 @@ def main():
                 if action != "NONE":
                     game.button(action)
                     game.tick()
-                    print(action)
                 else:
                     game.tick()
-                    print(action)
 
 
 if __name__ == "__main__":
