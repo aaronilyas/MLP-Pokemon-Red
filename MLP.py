@@ -78,6 +78,8 @@ class MLP(nn.Module):
             self.model.load_state_dict(torch.load(self.file_name))
 
     def relate_input_with_number(self, input_button: str) -> int:
+        if len(input_button) <= 0:
+            return 0
         if input_button[0] == "NONE":
             return 0
         if input_button[0] == "UP":
