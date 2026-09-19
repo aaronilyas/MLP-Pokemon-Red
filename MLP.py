@@ -16,7 +16,7 @@ class MLP(nn.Module):
         self, data_set: Data_Class.Data_From_JsonL, training_mode: bool
     ) -> None:
         self.number_of_activations_for_hidden_layer = 32
-        self.number_of_output_neurons = 10
+        self.number_of_output_neurons = 9
         super().__init__()
         if training_mode is True:
             self.data_set = data_set
@@ -100,6 +100,8 @@ class MLP(nn.Module):
             return 9
 
     def find_input_from_number(self, input_number: int) -> str:
+        if input_number == 0:
+            return "NONE"
         if input_number == 1:
             return "UP"
         if input_number == 2:
@@ -117,7 +119,7 @@ class MLP(nn.Module):
         if input_number == 8:
             return "END"
         else:
-            return "NONE"
+            return ""
 
     def train_network(self, number_of_epochs: int) -> None:
         criterion = nn.CrossEntropyLoss()
