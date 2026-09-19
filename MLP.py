@@ -16,7 +16,7 @@ class MLP(nn.Module):
         self, data_set: Data_Class.Data_From_JsonL, training_mode: bool
     ) -> None:
         self.number_of_activations_for_hidden_layer = 32
-        self.number_of_output_neurons = 9
+        self.number_of_output_neurons = 10
         super().__init__()
         if training_mode is True:
             self.data_set = data_set
@@ -47,7 +47,6 @@ class MLP(nn.Module):
                     self.number_of_activations_for_hidden_layer,
                     self.number_of_output_neurons,
                 ),
-                nn.Softmax(),
             )
             self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
         else:
@@ -73,7 +72,6 @@ class MLP(nn.Module):
                     self.number_of_activations_for_hidden_layer,
                     self.number_of_output_neurons,
                 ),
-                nn.Softmax(),
             )
             self.model.eval()
             self.file_name = "models_weights_and_biases.pth"
@@ -124,7 +122,7 @@ class MLP(nn.Module):
     def train_network(self, number_of_epochs: int) -> None:
         criterion = nn.CrossEntropyLoss()
 
-        for epoch in range(0, number_of_epochs, 2):
+        for epoch in range(number_of_epochs):
             pixels, label_info = (
                 self.data_set.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(
                     epoch
