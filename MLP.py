@@ -160,7 +160,7 @@ class MLP(nn.Module):
             self.model.eval()
         with torch.no_grad():
             input_data = input_data.to(torch.float32)
-            models_output = max(self.model(input_data))[0]
+            models_output = int(argmax(self.model(input_data)))
             return self.find_input_from_number(models_output)
 
     def save_weights_and_biases(self) -> None:
