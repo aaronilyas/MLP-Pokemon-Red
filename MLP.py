@@ -10,7 +10,7 @@ class MLP(nn.Module):
     number_of_activations_for_hidden_layer: int
     optimizer: optim.Adam
     model: nn.Sequential
-    number_of_activations_for_hidden_layer_for_eval_mode = 23040
+    number_of_activations_for_hidden_layer_for_input_layer = 23040
 
     def __init__(
         self, data_set: Data_Class.Data_From_JsonL, training_mode: bool
@@ -24,24 +24,37 @@ class MLP(nn.Module):
                 )[0]
             )
             self.number_of_activations_for_input_layer = len(self.input_value)
-
+            self.number_of_activations_for_hidden_layer = 32
+            self.number_of_output_neurons = 9
             self.model = nn.Sequential(
-                nn.Linear(self.number_of_activations_for_input_layer, 32),
+                nn.Linear(
+                    self.number_of_activations_for_input_layer,
+                    self.number_of_activations_for_hidden_layer,
+                ),
                 nn.ReLU(),
-                nn.Linear(32, 32),
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer,
+                    self.number_of_activations_for_hidden_layer,
+                ),
                 nn.Dropout(),
                 nn.ReLU(),
-                nn.Linear(32, 32),
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer,
+                    self.number_of_activations_for_hidden_layer,
+                ),
                 nn.ReLU(),
                 nn.Dropout(),
-                nn.Linear(32, 9),
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer,
+                    self.number_of_output_neurons,
+                ),
                 nn.Softmax(),
             )
             self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
         else:
             self.model = nn.Sequential(
                 nn.Linear(
-                    self.number_of_activations_for_hidden_layer_for_eval_mode, 32
+                    self.number_of_activations_for_hidden_layer_for_input_layer, 32
                 ),
                 nn.ReLU(),
                 nn.Dropout(),
