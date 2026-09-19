@@ -22,6 +22,7 @@ class Data_From_JsonL:
             with open(file_path, "r") as data:
                 for line in data:
                     self.number_of_lines += 1
+                    self.list_of_dictionaries.append(loads(line))
 
             data.close()
         except Exception as e:

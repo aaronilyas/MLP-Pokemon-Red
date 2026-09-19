@@ -15,11 +15,13 @@ def main():
             screen_image = game.screen.image
             if screen_image is not None:
                 gray_scale_values_of_image = screen_image.convert("L")
-                action = mlp.use_network(
+                pixels = (
                     torch.tensor(
                         gray_scale_values_of_image.getdata(), dtype=torch.float32
                     ).reshape(1, -1)
+                    / 255.0
                 )
+                action = mlp.use_network(pixels)
                 if action != "NONE":
                     game.button(action)
                     game.tick()
