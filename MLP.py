@@ -28,7 +28,10 @@ class MLP(nn.Module):
             self.model = nn.Sequential(
                 nn.Linear(self.number_of_activations_for_input_layer, 32),
                 nn.ReLU(),
+                nn.Linear(32, 32),
                 nn.Dropout(),
+                nn.ReLU(),
+                nn.Linear(32, 32),
                 nn.ReLU(),
                 nn.Dropout(),
                 nn.Softmax(),
