@@ -129,7 +129,7 @@ class MLP(nn.Module):
         for training_example in range(number_of_examples):
             pixels, label_info = (
                 self.data_set.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(
-                    number_of_examples
+                    training_example
                 )
             )
             input_data = pixels.float() / 255.0
