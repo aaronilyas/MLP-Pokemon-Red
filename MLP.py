@@ -10,24 +10,44 @@ class MLP(nn.Module):
     number_of_activations_for_hidden_layer: int
     optimizer: optim.Adam
     model: nn.Sequential
+    number_of_activations_for_hidden_layer_for_eval_mode = 23040
 
-    def __init__(self, data_set: Data_Class.Data_From_JsonL) -> None:
+    def __init__(
+        self, data_set: Data_Class.Data_From_JsonL, training_mode: bool
+    ) -> None:
         super().__init__()
-        self.data_set = data_set
-        self.input_value = (
-            self.data_set.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(0)[0]
-        )
-        self.number_of_activations_for_input_layer = len(self.input_value)
+        if training_mode is True:
+            self.data_set = data_set
+            self.input_value = (
+                self.data_set.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(
+                    0
+                )[0]
+            )
+            self.number_of_activations_for_input_layer = len(self.input_value)
 
-        self.model = nn.Sequential(
-            nn.Linear(self.number_of_activations_for_input_layer, 32),
-            nn.ReLU(),
-            nn.Dropout(),
-            nn.ReLU(),
-            nn.Dropout(),
-            nn.Softmax(),
-        )
-        self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
+            self.model = nn.Sequential(
+                nn.Linear(self.number_of_activations_for_input_layer, 32),
+                nn.ReLU(),
+                nn.Dropout(),
+                nn.ReLU(),
+                nn.Dropout(),
+                nn.Softmax(),
+            )
+            self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
+        else:
+            self.model = nn.Sequential(
+                nn.Linear(
+                    self.number_of_activations_for_hidden_layer_for_eval_mode, 32
+                ),
+                nn.ReLU(),
+                nn.Dropout(),
+                nn.ReLU(),
+                nn.Dropout(),
+                nn.Softmax(),
+            )
+            self.model.eval()
+            self.file_name = "models_weights_and_biases.pth"
+            self.model.load_state_dict(torch.load(self.file_name))
 
     def relate_input_with_number(self, input_button: str) -> int:
         if len(input_button) <= 0:
@@ -74,7 +94,7 @@ class MLP(nn.Module):
     def train_network(self, number_of_epochs: int) -> None:
         criterion = nn.CrossEntropyLoss()
 
-        for epoch in range(0, number_of_epochs, 37):
+        for epoch in range(0, number_of_epochs, 2):
             pixels, label_info = (
                 self.data_set.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(
                     epoch
@@ -103,15 +123,12 @@ class MLP(nn.Module):
                 self.find_input_from_number(expected_outputs),
             )"""
 
-    def load_models_weights_and_biases(self) -> None:
-        self.model.load_state_dict(torch.load("models_weights_and_biases.pth"))
-
     def use_network(self, input_data: torch.Tensor) -> str:
         if self.model.training:
             self.model.eval()
         with torch.no_grad():
             input_data = input_data.to(torch.float32)
-            models_output = max(self.model(input_data))
+            models_output = max(self.model(input_data))[0]
             return self.find_input_from_number(models_output)
 
     def save_weights_and_biases(self) -> None:
@@ -120,9 +137,9 @@ class MLP(nn.Module):
 
 def main():
     data = Data_Class.Data_From_JsonL("steps.jsonl")
-    mlp_1 = MLP(data)
-    # mlp_1.train_network(13542)
-    # data = data.get_tensor_of_gray_scale_pixel_values_and_its_dictionary(0)[0]
+    mlp_1 = MLP(data, True)
+    mlp_1.train_network(13542)
+    mlp_1.save_weights_and_biases()
 
 
 if __name__ == "__main__":

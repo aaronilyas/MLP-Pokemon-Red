@@ -18,24 +18,15 @@ class Data_From_JsonL:
         self.file_path = file_path
         self.number_of_lines = 0
         self.list_of_dictionaries = []
-        try: 
+        try:
             with open(file_path, "r") as data:
                 for line in data:
                     self.number_of_lines += 1
 
             data.close()
         except Exception as e:
-            print("Please input a file path for a JsonL file")
-            raise e
-            
-
-        with open(file_path, "r") as data_again:
-            for line_two in data_again:
-                if line_two.strip():
-                    line_value = line_two
-                    line_value = dict(loads(line_value))
-                    self.list_of_dictionaries.append(line_value)
-            data_again.close()
+            file_path = ""
+            # raise e
 
     def get_number_of_lines(self) -> int:
         """
